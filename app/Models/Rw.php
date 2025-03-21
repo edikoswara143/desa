@@ -7,6 +7,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Rw extends Model
 {
+
+  protected $fillable = [
+    'village_code',
+    'code',
+    'rw_number',
+  ];
+
   public function village(): BelongsTo
   {
     return $this->belongsTo(Village::class, 'village_code', 'code');

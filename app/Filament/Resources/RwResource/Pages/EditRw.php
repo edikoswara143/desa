@@ -8,12 +8,12 @@ use Filament\Resources\Pages\EditRecord;
 
 class EditRw extends EditRecord
 {
-    protected static string $resource = RwResource::class;
+  protected static string $resource = RwResource::class;
 
-    protected function getHeaderActions(): array
-    {
-        return [
-            Actions\DeleteAction::make(),
-        ];
-    }
+  protected function getHeaderActions(): array
+  {
+    return [
+      Actions\DeleteAction::make(),
+    ];
+  }
 }

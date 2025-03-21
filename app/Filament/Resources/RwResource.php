@@ -45,7 +45,13 @@ class RwResource extends Resource
                 $set('city_code', null);
                 $set('district_code', null);
                 $set('village_code', null);
+                $set('code', '');
+                $set('name', '');
               })
+              // ->afterStateUpdated(
+              //   fn($state, callable $set, callable $get) =>
+              //   $set('code', ($state ?? '') . '.' . ($get('city_code') ?? ''))
+              // )
               // ->afterStateUpdated(function (Get $get, Set $set) {
               //   $set('code', fn(Get $get): Collection => Province::query()
               //     ->where('kode', $get('province_kode'))
@@ -63,7 +69,13 @@ class RwResource extends Resource
               ->afterStateUpdated(function (Set $set) {
                 $set('district_code', null);
                 $set('village_code', null);
+                $set('code', '');
+                $set('name', '');
               })
+              // ->afterStateUpdated(
+              //   fn($state, callable $set, callable $get) =>
+              //   $set('code', ($get('province_code') ?? '') . '.' . ($state ?? ''))
+              // )
               // ->afterStateUpdated(function (Get $get, Set $set) {
               //   $set('kode', fn(Get $get): Collection => City::query()
               //     ->where('province_kode', $get('province_kode'))
@@ -76,7 +88,16 @@ class RwResource extends Resource
                 ->where('city_code', $get('city_code'))
                 ->pluck('name', 'code'))
               ->label('Select District')
-              ->afterStateUpdated(fn(Set $set) => $set('village_code', null))
+              ->afterStateUpdated(function (Set $set) {
+                $set('village_code', null);
+                $set('code', '');
+                $set('name', '');
+              })
+              // ->afterStateUpdated(fn(Set $set) => $set('village_code', null))
+              // ->afterStateUpdated(
+              //   fn($state, callable $set, callable $get) =>
+              //   $set('code', ($get('city_code') ?? '') . '.' . ($state ?? ''))
+              // )
               ->searchable()
               ->live()
               ->required()
@@ -92,17 +113,29 @@ class RwResource extends Resource
                 ->pluck('name', 'code'))
               ->label('Select Village')
               ->searchable()
+              ->afterStateUpdated(
+                fn($state, callable $set, callable $get) =>
+                $set('code', ($state ?? '') . '.' . (substr(preg_replace('/\D/', '', $state), -4)))
+              )
               ->live()
+              ->afterStateUpdated(function (Set $set, $state) {
+                // $set('village_code', null);
+                // $set('code', '');
+                $set('name', '');
+                $set('code', strlen($state) < 4 ? '' : $state  . '.' . (substr(preg_replace('/\D/', '', $state), -4)) ?? '');
+              })
               ->required()
               ->preload(),
             Forms\Components\TextInput::make('code')
               ->required()
-              ->disabled()
+              ->readOnly()
               ->live()
               ->label('Kode Rw')
               ->maxLength(255),
-            Forms\Components\TextInput::make('name')
+            Forms\Components\TextInput::make('rw_number')
               ->required()
+              ->label('Rw Number')
+              ->integer()
               ->maxLength(255),
           ])
           ->columns(3)
@@ -133,7 +166,7 @@ class RwResource extends Resource
       ->columns([
         Tables\Columns\TextColumn::make('code')
           ->searchable(),
-        Tables\Columns\TextColumn::make('village_code')
+        Tables\Columns\TextColumn::make('village.name')
           ->searchable(),
         Tables\Columns\TextColumn::make('rw_number')
           ->searchable(),
