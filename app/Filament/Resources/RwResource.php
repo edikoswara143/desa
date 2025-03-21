@@ -20,6 +20,7 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 
 class RwResource extends Resource
 {
@@ -46,7 +47,7 @@ class RwResource extends Resource
                 $set('district_code', null);
                 $set('village_code', null);
                 $set('code', '');
-                $set('name', '');
+                $set('rw_number', '');
               })
               // ->afterStateUpdated(
               //   fn($state, callable $set, callable $get) =>
@@ -70,7 +71,7 @@ class RwResource extends Resource
                 $set('district_code', null);
                 $set('village_code', null);
                 $set('code', '');
-                $set('name', '');
+                $set('rw_number', '');
               })
               // ->afterStateUpdated(
               //   fn($state, callable $set, callable $get) =>
@@ -91,7 +92,7 @@ class RwResource extends Resource
               ->afterStateUpdated(function (Set $set) {
                 $set('village_code', null);
                 $set('code', '');
-                $set('name', '');
+                $set('rw_number', '');
               })
               // ->afterStateUpdated(fn(Set $set) => $set('village_code', null))
               // ->afterStateUpdated(
@@ -115,17 +116,28 @@ class RwResource extends Resource
               ->searchable()
               ->afterStateUpdated(
                 fn($state, callable $set, callable $get) =>
-                $set('code', ($state ?? '') . '.' . (substr(preg_replace('/\D/', '', $state), -4)))
+                $set('code', ($state ?? '') . '.' . strtoupper(Str::random(7)))
               )
               ->live()
               ->afterStateUpdated(function (Set $set, $state) {
                 // $set('village_code', null);
                 // $set('code', '');
-                $set('name', '');
-                $set('code', strlen($state) < 4 ? '' : $state  . '.' . (substr(preg_replace('/\D/', '', $state), -4)) ?? '');
+                $set('rw_number', '');
+                $set('code', ($state ?? '') . '.' . strtoupper(Str::random(7)));
+                $set('code', strlen($state) < 7 ? '' : $state  . strtoupper(Str::random(7)));
               })
+              // ->afterStateHydrated(
+              //   fn($state, callable $set) =>
+              //   $set('village_code', $state ?? '') // If null, set default ID null
+              // )
               ->required()
               ->preload(),
+            // Forms\Components\TextInput::make('village_code')
+            //   ->required()
+            //   // ->readOnly()
+            //   ->live()
+            //   ->label('Kode Rw')
+            //   ->maxLength(255),
             Forms\Components\TextInput::make('code')
               ->required()
               ->readOnly()

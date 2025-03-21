@@ -5,12 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+
 class Rw extends Model
 {
 
   protected $fillable = [
-    'village_code',
     'code',
+    'village_code',
+    'province_code',
+    'city_code',
+    'district_code',
     'rw_number',
   ];
 
