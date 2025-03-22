@@ -19,4 +19,8 @@ class Province extends Model
   {
     return $this->hasMany(Rt::class, 'province_code', 'code')->chaperone();
   }
+  public function resident(): HasMany
+  {
+    return $this->hasMany(Resident::class, 'province_code', 'code')->chaperone();
+  }
 }

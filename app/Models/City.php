@@ -21,4 +21,8 @@ class City extends Model
   {
     return $this->hasMany(Rw::class, 'city_code', 'code')->chaperone();
   }
+  public function resident(): HasMany
+  {
+    return $this->hasMany(Resident::class, 'city_code', 'code')->chaperone();
+  }
 }

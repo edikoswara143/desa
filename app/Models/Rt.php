@@ -5,6 +5,7 @@ namespace App\Models;
 use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Validation\ValidationException;
 
 class Rt extends Model
@@ -73,5 +74,9 @@ class Rt extends Model
   public function rw(): BelongsTo
   {
     return $this->belongsTo(Rw::class, 'rw_code', 'code');
+  }
+  public function resident(): HasMany
+  {
+    return $this->hasMany(Resident::class, 'rt_code', 'code');
   }
 }

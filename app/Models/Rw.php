@@ -34,4 +34,8 @@ class Rw extends Model
   {
     return $this->hasMany(Rt::class, 'rw_code', 'code');
   }
+  public function resident(): HasMany
+  {
+    return $this->hasMany(Resident::class, 'village', 'code');
+  }
 }

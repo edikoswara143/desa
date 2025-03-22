@@ -17,4 +17,8 @@ class Village extends Model
   {
     return $this->hasMany(Rw::class, 'village_code', 'code');
   }
+  public function resident(): HasMany
+  {
+    return $this->hasMany(Resident::class, 'village_code', 'code');
+  }
 }
