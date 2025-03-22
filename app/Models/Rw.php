@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Rw extends Model
 {
@@ -25,5 +25,13 @@ class Rw extends Model
   public function province(): BelongsTo
   {
     return $this->belongsTo(Province::class, 'province_code', 'code');
+  }
+  public function city(): BelongsTo
+  {
+    return $this->belongsTo(City::class, 'city_code', 'code');
+  }
+  public function rt(): HasMany
+  {
+    return $this->hasMany(Rt::class, 'rw_code', 'code');
   }
 }

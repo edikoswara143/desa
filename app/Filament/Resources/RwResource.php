@@ -37,7 +37,6 @@ class RwResource extends Resource
           ->schema([
             Forms\Components\Select::make('province_code')
               ->relationship(name: 'province', titleAttribute: 'name')
-              // ->options(Province::all()->pluck('name', 'kode'))
               ->label('Select Province')
               ->searchable()
               ->preload()
@@ -49,17 +48,11 @@ class RwResource extends Resource
                 $set('code', '');
                 $set('rw_number', '');
               })
-              // ->afterStateUpdated(
-              //   fn($state, callable $set, callable $get) =>
-              //   $set('code', ($state ?? '') . '.' . ($get('city_code') ?? ''))
-              // )
-              // ->afterStateUpdated(function (Get $get, Set $set) {
-              //   $set('code', fn(Get $get): Collection => Province::query()
-              //     ->where('kode', $get('province_kode'))
-              //     ->pluck('kode'));
-              // })
+              ->reactive()
+              ->afterStateUpdated(fn(callable $set) => $set('city_code', null)) // Reset subcategory on change
               ->required(),
             Forms\Components\Select::make('city_code')
+              ->reactive()
               ->options(fn(Get $get): Collection => City::query()
                 ->where('province_code', $get('province_code'))
                 ->pluck('name', 'code'))
@@ -73,16 +66,6 @@ class RwResource extends Resource
                 $set('code', '');
                 $set('rw_number', '');
               })
-              // ->afterStateUpdated(
-              //   fn($state, callable $set, callable $get) =>
-              //   $set('code', ($get('province_code') ?? '') . '.' . ($state ?? ''))
-              // )
-              // ->afterStateUpdated(function (Get $get, Set $set) {
-              //   $set('kode', fn(Get $get): Collection => City::query()
-              //     ->where('province_kode', $get('province_kode'))
-              //     ->where('kode', $get('city_kode'))
-              //     ->pluck('kode'));
-              // })
               ->preload(),
             Forms\Components\Select::make('district_code')
               ->options(fn(Get $get): Collection => District::query()
@@ -94,16 +77,10 @@ class RwResource extends Resource
                 $set('code', '');
                 $set('rw_number', '');
               })
-              // ->afterStateUpdated(fn(Set $set) => $set('village_code', null))
-              // ->afterStateUpdated(
-              //   fn($state, callable $set, callable $get) =>
-              //   $set('code', ($get('city_code') ?? '') . '.' . ($state ?? ''))
-              // )
               ->searchable()
               ->live()
               ->required()
               ->preload()
-            // ->afterStateUpdated(fn(Set $set) => $set('city_kode', null))
           ])
           ->columns(3),
         Fieldset::make('Wilayah')
@@ -120,24 +97,12 @@ class RwResource extends Resource
               )
               ->live()
               ->afterStateUpdated(function (Set $set, $state) {
-                // $set('village_code', null);
-                // $set('code', '');
                 $set('rw_number', '');
                 $set('code', ($state ?? '') . '.' . strtoupper(Str::random(7)));
                 $set('code', strlen($state) < 7 ? '' : $state  . strtoupper(Str::random(7)));
               })
-              // ->afterStateHydrated(
-              //   fn($state, callable $set) =>
-              //   $set('village_code', $state ?? '') // If null, set default ID null
-              // )
               ->required()
               ->preload(),
-            // Forms\Components\TextInput::make('village_code')
-            //   ->required()
-            //   // ->readOnly()
-            //   ->live()
-            //   ->label('Kode Rw')
-            //   ->maxLength(255),
             Forms\Components\TextInput::make('code')
               ->required()
               ->readOnly()
@@ -146,30 +111,13 @@ class RwResource extends Resource
               ->maxLength(255),
             Forms\Components\TextInput::make('rw_number')
               ->required()
+              ->unique(ignoreRecord: true)
               ->label('Rw Number')
               ->integer()
               ->maxLength(255),
           ])
           ->columns(3)
       ]);
-    // ->schema([
-    //   Forms\Components\TextInput::make('code')
-    //     ->required()
-    //     ->maxLength(255),
-    //   Forms\Components\Select::make('village_code')
-    //     ->relationship(name: 'village', titleAttribute: 'name')
-    //     // ->options(Province::all()->pluck('name', 'kode'))
-    //     ->label('Select Village')
-    //     ->searchable()
-    //     ->preload()
-    //     ->live()
-    //     ->optionsLimit(20)
-    //     ->searchDebounce(500)
-    //     ->required(),
-    //   Forms\Components\TextInput::make('rw_number')
-    //     ->required()
-    //     ->maxLength(255),
-    // ]);
   }
 
   public static function table(Table $table): Table
@@ -179,8 +127,10 @@ class RwResource extends Resource
         Tables\Columns\TextColumn::make('code')
           ->searchable(),
         Tables\Columns\TextColumn::make('village.name')
+          ->sortable()
           ->searchable(),
         Tables\Columns\TextColumn::make('rw_number')
+          ->sortable()
           ->searchable(),
         Tables\Columns\TextColumn::make('deleted_at')
           ->dateTime()
@@ -195,6 +145,7 @@ class RwResource extends Resource
           ->sortable()
           ->toggleable(isToggledHiddenByDefault: true),
       ])
+      ->defaultSort('created_at', 'desc')
       ->filters([
         //
       ])
@@ -213,6 +164,24 @@ class RwResource extends Resource
     return [
       //
     ];
+  }
+
+  /**
+   * Ignore 'rw_code' when updating an RW
+   */
+  public static function mutateFormDataBeforeSave(array $data): array
+  {
+    if (request()->routeIs('filament.admin.resources.rws.edit')) {
+      unset($data['code']); // Remove 'rw_code' from update request
+    }
+    return $data;
+  }
+
+  public static function beforeSave($record, array $data)
+  {
+    if (Rw::where('rw_code', $data['rw_code'])->where('id', '!=', $record->id)->exists()) {
+      throw new \Exception('RW Code already exists!');
+    }
   }
 
   public static function getPages(): array

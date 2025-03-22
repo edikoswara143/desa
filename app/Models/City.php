@@ -17,4 +17,8 @@ class City extends Model
   {
     return $this->hasMany(District::class, 'city_code', 'code')->chaperone();
   }
+  public function rw(): HasMany
+  {
+    return $this->hasMany(Rw::class, 'city_code', 'code')->chaperone();
+  }
 }
