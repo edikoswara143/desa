@@ -144,9 +144,13 @@ class ResidentResource extends Resource
           ->schema([
             Forms\Components\TextInput::make('nik')
               ->required()
+              ->validationMessages([
+                'unique' => 'This NIK is already assigned to another NIK.',
+              ])
               ->integer()
               ->maxLength(16),
             Forms\Components\TextInput::make('nkk')
+
               ->required()
               ->integer()
               ->maxLength(16),
@@ -295,6 +299,7 @@ class ResidentResource extends Resource
       ])
       ->actions([
         Tables\Actions\EditAction::make(),
+        Tables\Actions\ViewAction::make(),
       ])
       ->bulkActions([
         Tables\Actions\BulkActionGroup::make([
@@ -303,6 +308,10 @@ class ResidentResource extends Resource
       ]);
   }
 
+  public static function getNavigationBadge(): ?string
+  {
+    return static::getModel()::count();
+  }
   public static function getRelations(): array
   {
     return [
@@ -315,6 +324,7 @@ class ResidentResource extends Resource
     return [
       'index' => Pages\ListResidents::route('/'),
       'create' => Pages\CreateResident::route('/create'),
+      'view' => Pages\ViewResident::route('/{record}'),
       'edit' => Pages\EditResident::route('/{record}/edit'),
     ];
   }

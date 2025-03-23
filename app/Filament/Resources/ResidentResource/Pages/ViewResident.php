@@ -4,16 +4,16 @@ namespace App\Filament\Resources\ResidentResource\Pages;
 
 use App\Filament\Resources\ResidentResource;
 use Filament\Actions;
-use Filament\Resources\Pages\ListRecords;
+use Filament\Resources\Pages\ViewRecord;
 
-class ListResidents extends ListRecords
+class ViewResident extends ViewRecord
 {
   protected static string $resource = ResidentResource::class;
 
   protected function getHeaderActions(): array
   {
     return [
-      Actions\CreateAction::make(),
+      Actions\EditAction::make(),
     ];
   }
 }

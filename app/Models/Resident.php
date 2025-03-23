@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Validation\ValidationException;
 
 class Resident extends Model
 {
@@ -30,6 +32,48 @@ class Resident extends Model
     'rw_code',
     'rt_code',
   ];
+
+  protected static function boot()
+  {
+    parent::boot();
+
+    static::creating(function ($nik) {
+      // dd($rwRt->rw_code);
+      if (\App\Models\Resident::where('nik', $nik->nik)
+        // ->where('nik', $nik->nik)
+        ->exists()
+      ) {
+        Notification::make()
+          ->title('Error')
+          ->body('This NIK is already assigned to another NIK.')
+          ->danger()
+          ->send();
+
+        throw ValidationException::withMessages([
+          'nik' => 'This NIK is already assigned to another NIK.'
+        ]);
+      }
+    });
+
+    static::updating(function ($nik) {
+      if (\App\Models\Resident::where('nik', $nik->nik)
+        ->where('id', '!=', $nik->id) // Exclude the current record
+        ->where('nik', $nik->nik)
+        ->exists()
+      ) {
+        Notification::make()
+          ->title('Error')
+          ->body('This RT is already assigned to another RW.')
+          ->danger()
+          ->send();
+
+        throw ValidationException::withMessages([
+          'rt_number' => 'This RT is already assigned to another RW.'
+        ]);
+      }
+    });
+  }
+
   public function province(): BelongsTo
   {
     return $this->belongsTo(Province::class, 'province_code', 'code');
