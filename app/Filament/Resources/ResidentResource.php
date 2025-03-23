@@ -232,9 +232,11 @@ class ResidentResource extends Resource
       ->columns([
         Tables\Columns\ImageColumn::make('picture')
           ->searchable(),
-        Tables\Columns\TextColumn::make('nik')
-          ->searchable(),
         Tables\Columns\TextColumn::make('nkk')
+          ->label('NKK')
+          ->searchable(),
+        Tables\Columns\TextColumn::make('nik')
+          ->label('NIK')
           ->searchable(),
         Tables\Columns\TextColumn::make('name')
           ->searchable(),
@@ -308,6 +310,10 @@ class ResidentResource extends Resource
       ]);
   }
 
+  public static function getGloballySearchableAttributes(): array
+  {
+    return ['nik', 'nkk', 'name'];
+  }
   public static function getNavigationBadge(): ?string
   {
     return static::getModel()::count();
@@ -318,6 +324,18 @@ class ResidentResource extends Resource
       //
     ];
   }
+
+  protected function getFooterWidgetsColumns(): int | array
+  {
+    return 1;
+  }
+  public static function getWidgets(): array
+  {
+    return [
+      ResidentResource\Widgets\ResidentOverview::class,
+    ];
+  }
+  protected int | string | array $columnSpan = 'full';
 
   public static function getPages(): array
   {
