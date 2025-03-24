@@ -50,6 +50,7 @@ class VillageResource extends Resource
   public static function table(Table $table): Table
   {
     return $table
+      // ->defaultPaginationPageOption(25)
       ->columns([
         Tables\Columns\TextColumn::make('code')
           ->searchable(),
@@ -75,11 +76,11 @@ class VillageResource extends Resource
         //
       ])
       ->actions([
-        Tables\Actions\EditAction::make(),
+        // Tables\Actions\EditAction::make(),
       ])
       ->bulkActions([
         Tables\Actions\BulkActionGroup::make([
-          Tables\Actions\DeleteBulkAction::make(),
+          // Tables\Actions\DeleteBulkAction::make(),
         ]),
       ]);
   }
@@ -100,8 +101,8 @@ class VillageResource extends Resource
   {
     return [
       'index' => Pages\ListVillages::route('/'),
-      'create' => Pages\CreateVillage::route('/create'),
-      'edit' => Pages\EditVillage::route('/{record}/edit'),
+      // 'create' => Pages\CreateVillage::route('/create'),
+      // 'edit' => Pages\EditVillage::route('/{record}/edit'),
     ];
   }
 }

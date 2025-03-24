@@ -8,12 +8,12 @@ use Filament\Resources\Pages\ListRecords;
 
 class ListVillages extends ListRecords
 {
-    protected static string $resource = VillageResource::class;
+  protected static string $resource = VillageResource::class;
 
-    protected function getHeaderActions(): array
-    {
-        return [
-            Actions\CreateAction::make(),
-        ];
-    }
+  protected function getHeaderActions(): array
+  {
+    return [
+      // Actions\CreateAction::make(),
+    ];
+  }
 }

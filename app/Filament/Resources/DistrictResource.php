@@ -75,11 +75,11 @@ class DistrictResource extends Resource
         //
       ])
       ->actions([
-        Tables\Actions\EditAction::make(),
+        // Tables\Actions\EditAction::make(),
       ])
       ->bulkActions([
         Tables\Actions\BulkActionGroup::make([
-          Tables\Actions\DeleteBulkAction::make(),
+          // Tables\Actions\DeleteBulkAction::make(),
         ]),
       ]);
   }
@@ -100,8 +100,8 @@ class DistrictResource extends Resource
   {
     return [
       'index' => Pages\ListDistricts::route('/'),
-      'create' => Pages\CreateDistrict::route('/create'),
-      'edit' => Pages\EditDistrict::route('/{record}/edit'),
+      // 'create' => Pages\CreateDistrict::route('/create'),
+      // 'edit' => Pages\EditDistrict::route('/{record}/edit'),
     ];
   }
 }

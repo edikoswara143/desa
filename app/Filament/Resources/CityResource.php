@@ -75,11 +75,11 @@ class CityResource extends Resource
         //
       ])
       ->actions([
-        Tables\Actions\EditAction::make(),
+        // Tables\Actions\EditAction::make(),
       ])
       ->bulkActions([
         Tables\Actions\BulkActionGroup::make([
-          Tables\Actions\DeleteBulkAction::make(),
+          // Tables\Actions\DeleteBulkAction::make(),
         ]),
       ]);
   }
@@ -100,8 +100,8 @@ class CityResource extends Resource
   {
     return [
       'index' => Pages\ListCities::route('/'),
-      'create' => Pages\CreateCity::route('/create'),
-      'edit' => Pages\EditCity::route('/{record}/edit'),
+      // 'create' => Pages\CreateCity::route('/create'),
+      // 'edit' => Pages\EditCity::route('/{record}/edit'),
     ];
   }
 }

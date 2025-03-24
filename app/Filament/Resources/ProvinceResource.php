@@ -66,11 +66,11 @@ class ProvinceResource extends Resource
         //
       ])
       ->actions([
-        Tables\Actions\EditAction::make(),
+        // Tables\Actions\EditAction::make(),
       ])
       ->bulkActions([
         Tables\Actions\BulkActionGroup::make([
-          Tables\Actions\DeleteBulkAction::make(),
+          // Tables\Actions\DeleteBulkAction::make(),
         ]),
       ]);
   }
@@ -92,7 +92,7 @@ class ProvinceResource extends Resource
     return [
       'index' => Pages\ListProvinces::route('/'),
       'create' => Pages\CreateProvince::route('/create'),
-      'edit' => Pages\EditProvince::route('/{record}/edit'),
+      // 'edit' => Pages\EditProvince::route('/{record}/edit'),
     ];
   }
 }

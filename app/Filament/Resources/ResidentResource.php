@@ -164,6 +164,8 @@ class ResidentResource extends Resource
               ->maxLength(255),
             DatePicker::make('birth_date')
               ->native(false)
+              ->closeOnDateSelection()
+              ->maxDate(now())
               ->required(),
             Select::make('sex')
               ->searchable()
@@ -241,43 +243,43 @@ class ResidentResource extends Resource
         Tables\Columns\TextColumn::make('name')
           ->searchable(),
         Tables\Columns\TextColumn::make('email')
-          ->toggleable()
+          ->toggleable(isToggledHiddenByDefault: true)
           ->searchable(),
         Tables\Columns\TextColumn::make('birth_date')
-          ->searchable()
+          ->toggleable(isToggledHiddenByDefault: true)
           ->toggleable(),
         Tables\Columns\TextColumn::make('sex')
-          ->toggleable()
+          ->toggleable(isToggledHiddenByDefault: true)
           ->searchable(),
         Tables\Columns\TextColumn::make('address')
-          ->toggleable()
+          ->toggleable(isToggledHiddenByDefault: true)
           ->searchable(),
         Tables\Columns\TextColumn::make('religion')
-          ->toggleable()
+          ->toggleable(isToggledHiddenByDefault: true)
           ->searchable(),
         Tables\Columns\TextColumn::make('marital_status')
-          ->toggleable()
+          ->toggleable(isToggledHiddenByDefault: true)
           ->searchable(),
         Tables\Columns\TextColumn::make('occupation')
-          ->toggleable()
+          ->toggleable(isToggledHiddenByDefault: true)
           ->searchable(),
         Tables\Columns\TextColumn::make('nationality')
-          ->toggleable()
+          ->toggleable(isToggledHiddenByDefault: true)->toggleable()
           ->searchable(),
         Tables\Columns\TextColumn::make('blood_type')
-          ->toggleable()
+          ->toggleable(isToggledHiddenByDefault: true)
           ->searchable(),
         Tables\Columns\TextColumn::make('province.name')
-          ->toggleable()
+          ->toggleable(isToggledHiddenByDefault: true)
           ->searchable(),
         Tables\Columns\TextColumn::make('city.name')
-          ->toggleable()
+          ->toggleable(isToggledHiddenByDefault: true)
           ->searchable(),
         Tables\Columns\TextColumn::make('district.name')
-          ->toggleable()
+          ->toggleable(isToggledHiddenByDefault: true)
           ->searchable(),
         Tables\Columns\TextColumn::make('village.name')
-          ->toggleable()
+          ->toggleable(isToggledHiddenByDefault: true)
           ->searchable(),
         Tables\Columns\TextColumn::make('rw.rw_number')
           ->searchable(),
