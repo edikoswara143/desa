@@ -188,7 +188,7 @@ class RtResource extends Resource
         //
       ])
       ->actions([
-        Tables\Actions\EditAction::make(),
+        // Tables\Actions\EditAction::make(),
       ])
       ->bulkActions([
         Tables\Actions\BulkActionGroup::make([
@@ -214,7 +214,8 @@ class RtResource extends Resource
     return [
       'index' => Pages\ListRts::route('/'),
       'create' => Pages\CreateRt::route('/create'),
-      'edit' => Pages\EditRt::route('/{record}/edit'),
+      'create' => Pages\CreateRt::route('/create'),
+      // 'edit' => Pages\EditRt::route('/{record}/edit'),
     ];
   }
 }

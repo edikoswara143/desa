@@ -150,7 +150,7 @@ class RwResource extends Resource
         //
       ])
       ->actions([
-        Tables\Actions\EditAction::make(),
+        // Tables\Actions\EditAction::make(),
       ])
       ->bulkActions([
         Tables\Actions\BulkActionGroup::make([
@@ -194,7 +194,7 @@ class RwResource extends Resource
     return [
       'index' => Pages\ListRws::route('/'),
       'create' => Pages\CreateRw::route('/create'),
-      'edit' => Pages\EditRw::route('/{record}/edit'),
+      // 'edit' => Pages\EditRw::route('/{record}/edit'),
     ];
   }
 }
