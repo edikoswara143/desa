@@ -120,12 +120,12 @@ class RtResource extends Resource
               ->required()
               ->afterStateUpdated(
                 fn($state, callable $set, callable $get) =>
-                $set('code', ($state ?? '') . '.' . strtoupper(Str::random(10)))
+                $set('code', ($state ?? '') . '.' . Str::uuid())
               )
               ->afterStateUpdated(function (Set $set, $state) {
                 $set('rt_number', '');
-                $set('code', ($state ?? '') . '.' . strtoupper(Str::random(10)));
-                $set('code', strlen($state) < 10 ? '' : $state  . strtoupper(Str::random(10)));
+                $set('code', ($state ?? '') . '.' . Str::uuid());
+                $set('code', strlen($state) < 7 ? '' : $state  . Str::uuid());
               })
               ->preload(),
             Forms\Components\TextInput::make('code')
@@ -164,13 +164,15 @@ class RtResource extends Resource
     return $table
       ->columns([
         Tables\Columns\TextColumn::make('code')
-          ->searchable(),
+          ->searchable()
+          ->toggleable(isToggledHiddenByDefault: true),
         Tables\Columns\TextColumn::make('rw.rw_number')
           ->sortable()
           ->searchable(),
         Tables\Columns\TextColumn::make('rt_number')
           ->sortable()
           ->searchable(),
+        Tables\Columns\TextColumn::make('resident_count')->counts('resident')->label('Residents')->sortable(),
         Tables\Columns\TextColumn::make('deleted_at')
           ->dateTime()
           ->sortable()

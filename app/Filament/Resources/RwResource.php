@@ -7,6 +7,7 @@ use App\Filament\Resources\RwResource\RelationManagers;
 use App\Models\City;
 use App\Models\District;
 use App\Models\Province;
+use App\Models\Rt;
 use App\Models\Rw;
 use App\Models\Village;
 use Filament\Forms;
@@ -93,13 +94,13 @@ class RwResource extends Resource
               ->searchable()
               ->afterStateUpdated(
                 fn($state, callable $set, callable $get) =>
-                $set('code', ($state ?? '') . '.' . strtoupper(Str::random(7)))
+                $set('code', ($state ?? '') . '.' . Str::uuid())
               )
               ->live()
               ->afterStateUpdated(function (Set $set, $state) {
                 $set('rw_number', '');
-                $set('code', ($state ?? '') . '.' . strtoupper(Str::random(7)));
-                $set('code', strlen($state) < 7 ? '' : $state  . strtoupper(Str::random(7)));
+                $set('code', ($state ?? '') . '.' . Str::uuid());
+                $set('code', strlen($state) < 7 ? '' : $state  . Str::uuid());
               })
               ->required()
               ->preload(),
@@ -123,15 +124,21 @@ class RwResource extends Resource
   public static function table(Table $table): Table
   {
     return $table
+      // ->modifyQueryUsing(fn(Builder $query) => $query->withCount([
+      //   'rw_code' => fn(Builder $query) => $query->where('code', 'rw_code')
+      // ]))
       ->columns([
         Tables\Columns\TextColumn::make('code')
+          ->hidden()
           ->searchable(),
         Tables\Columns\TextColumn::make('village.name')
           ->sortable()
           ->searchable(),
         Tables\Columns\TextColumn::make('rw_number')
+          ->label('RW Number')
           ->sortable()
           ->searchable(),
+        Tables\Columns\TextColumn::make('rt_count')->counts('rt')->label('RT')->sortable(),
         Tables\Columns\TextColumn::make('deleted_at')
           ->dateTime()
           ->sortable()
