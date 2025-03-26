@@ -246,8 +246,8 @@ class ResidentResource extends Resource
           ->toggleable(isToggledHiddenByDefault: true)
           ->searchable(),
         Tables\Columns\TextColumn::make('birth_date')
-          ->toggleable(isToggledHiddenByDefault: true)
-          ->toggleable(),
+          ->toggleable(isToggledHiddenByDefault: true),
+        // ->toggleable(),
         Tables\Columns\TextColumn::make('sex')
           ->toggleable(isToggledHiddenByDefault: true)
           ->searchable(),
@@ -264,7 +264,7 @@ class ResidentResource extends Resource
           ->toggleable(isToggledHiddenByDefault: true)
           ->searchable(),
         Tables\Columns\TextColumn::make('nationality')
-          ->toggleable(isToggledHiddenByDefault: true)->toggleable()
+          ->toggleable(isToggledHiddenByDefault: true)
           ->searchable(),
         Tables\Columns\TextColumn::make('blood_type')
           ->toggleable(isToggledHiddenByDefault: true)
@@ -299,16 +299,29 @@ class ResidentResource extends Resource
           ->toggleable(isToggledHiddenByDefault: true),
       ])
       ->filters([
-        //
+        Tables\Filters\TrashedFilter::make(),
       ])
       ->actions([
         Tables\Actions\EditAction::make(),
         Tables\Actions\ViewAction::make(),
+        Tables\Actions\DeleteAction::make(),
+        Tables\Actions\ForceDeleteAction::make(),
+        Tables\Actions\RestoreAction::make(),
       ])
       ->bulkActions([
         Tables\Actions\BulkActionGroup::make([
           Tables\Actions\DeleteBulkAction::make(),
+          Tables\Actions\ForceDeleteBulkAction::make(),
+          Tables\Actions\RestoreBulkAction::make(),
         ]),
+      ]);
+  }
+
+  public static function getEloquentQuery(): Builder
+  {
+    return parent::getEloquentQuery()
+      ->withoutGlobalScopes([
+        SoftDeletingScope::class,
       ]);
   }
 

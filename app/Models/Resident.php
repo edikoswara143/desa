@@ -5,10 +5,13 @@ namespace App\Models;
 use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Validation\ValidationException;
 
 class Resident extends Model
+
 {
+  use SoftDeletes;
   protected $fillable = [
     'nik',
     'nkk',

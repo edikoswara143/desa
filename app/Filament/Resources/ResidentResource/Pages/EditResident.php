@@ -15,6 +15,17 @@ class EditResident extends EditRecord
   {
     return [
       Actions\DeleteAction::make(),
+      Actions\ForceDeleteAction::make(),
+      Actions\RestoreAction::make(),
+    ];
+  }
+
+  protected function getActions(): array
+  {
+    return [
+      Actions\DeleteAction::make(),
+      Actions\ForceDeleteAction::make(),
+      Actions\RestoreAction::make(),
     ];
   }
 }
