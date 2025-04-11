@@ -1,14 +1,14 @@
 <div
-    class="flex justify-between items-center space-x-4 fixed bottom-0 left-0 right-0 z-50 mx-auto max-w-sm p-4 rounded-tr-lg rounded-tl-lg"
+    class="flex justify-between items-center space-x-4 fixed bottom-0 left-0 right-0 z-50 mx-auto max-w-sm px-4 pb-4 pt-2 bg-slate-100"
 >
     <div
-        class="flex justify-between items-center bg-sky-50 w-full bg-sk p-4 rounded-2xl"
+        class="flex justify-between items-center bg-white w-full p-4 rounded-xl"
     >
         <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
             fill="currentColor"
-            class="size-6 text-sky-500"
+            class="size-6 text-sky-700"
         >
             <path
                 d="M11.47 3.841a.75.75 0 0 1 1.06 0l8.69 8.69a.75.75 0 1 0 1.06-1.061l-8.689-8.69a2.25 2.25 0 0 0-3.182 0l-8.69 8.69a.75.75 0 1 0 1.061 1.06l8.69-8.689Z"

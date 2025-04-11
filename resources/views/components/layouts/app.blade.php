@@ -13,14 +13,14 @@
         @livewireStyles @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="scroll-smooth bg-gray-300 antialiased">
-        <sectio
-            class="mx-auto flex h-screen max-w-sm flex-col bg-gradient-to-b from-slate-200 to-sky-200 px-4 shadow"
+        <section
+            class="mx-auto flex min-h-screen max-w-sm flex-col bg-slate-100 px-4"
         >
-        <livewire:components.partial.header/>
-            <main class="py-20">
+            <livewire:components.partial.header />
+            <main class="pt-24">
                 {{ $slot }}
             </main>
-            <livewire:components.partial.bottom-navigation/>
+            <livewire:components.partial.bottom-navigation />
         </section>
 
         @livewireScripts
