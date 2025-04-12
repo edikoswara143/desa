@@ -10,6 +10,7 @@ use App\Models\Province;
 use App\Models\Rt;
 use App\Models\Rw;
 use App\Models\Village;
+use BezhanSalleh\FilamentShield\Contracts\HasShieldPermissions;
 use Filament\Forms;
 use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Form;
@@ -25,12 +26,15 @@ use Illuminate\Support\Str;
 
 class RwResource extends Resource
 {
+
   protected static ?string $model = Rw::class;
 
   protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
   protected static ?string $navigationGroup = 'Management Wilayah';
   protected static ?int $navigationSort = 5;
   public static function form(Form $form): Form
+
+
   {
     return $form
       ->schema([

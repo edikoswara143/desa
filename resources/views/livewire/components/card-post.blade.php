@@ -1,4 +1,6 @@
-<div class="flex flex-col w-full h-52 rounded-lg shadow bg-sky-50 p-2 gap-y-1">
+<div
+    class="flex flex-col w-full h-52 rounded-lg shadow bg-slate-50 p-2 gap-y-1"
+>
     <div class="relative w-full h-9/12 overflow-hidden rounded-lg">
         <img
             class="bg-cover object-cover absolute w-full h-full"

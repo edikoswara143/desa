@@ -5,6 +5,8 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\ProvinceResource\Pages;
 use App\Filament\Resources\ProvinceResource\RelationManagers;
 use App\Models\Province;
+use App\Models\User;
+use BezhanSalleh\FilamentShield\Contracts\HasShieldPermissions;
 use Filament\Forms;
 use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Form;
@@ -21,6 +23,7 @@ class ProvinceResource extends Resource
   protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
   protected static ?string $navigationGroup = 'Management Wilayah';
   protected static ?int $navigationSort = 1;
+
 
   public static function form(Form $form): Form
   {
