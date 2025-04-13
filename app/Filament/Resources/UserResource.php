@@ -9,9 +9,11 @@ use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
-use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Tables\Table;
+use Illuminate\Contracts\Database\Eloquent\Builder as EloquentBuilder;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 class UserResource extends Resource
@@ -37,11 +39,21 @@ class UserResource extends Resource
           ->maxDate(now()),
         Forms\Components\TextInput::make('password')
           ->password()
-          ->required()
+          ->dehydrateStateUsing(fn($state) => Hash::make($state))
+          ->dehydrated(fn($state) => filled($state))
+          // ->required()
           ->maxLength(255),
         Forms\Components\Select::make('roles')
           ->relationship('roles', 'name')
           ->columnSpanFull()
+          ->visible(function () {
+            $authUser = Auth::user();
+            if (!$authUser) {
+              return false;
+            }
+            $user = User::find($authUser->id);
+            return $user->hasRole('admin');
+          })
           ->native(true)
           ->preload(),
       ]);
@@ -57,10 +69,11 @@ class UserResource extends Resource
           ->searchable(),
         Tables\Columns\TextColumn::make('email_verified_at')
           ->dateTime()
+          ->toggleable(isToggledHiddenByDefault: true)
           ->sortable(),
         Tables\Columns\TextColumn::make('roles')
           ->label('Role')
-          ->label('Roles')
+          // ->sortable()
           ->getStateUsing(fn($record) => collect($record->roles)
             ->pluck('name')
             ->map(fn($name) => Str::headline(str_replace('_', ' ', $name))))
@@ -106,6 +119,18 @@ class UserResource extends Resource
   public static function getNavigationBadge(): ?string
   {
     return static::getModel()::count();
+  }
+
+  public static function getEloquentQuery(): Builder
+  {
+    $user = User::find(Auth::user()->id);
+    // $user = auth()->user();
+
+    if ($user->hasRole('admin')) {
+      return parent::getEloquentQuery();
+    }
+
+    return parent::getEloquentQuery()->where('id', $user->id);
   }
 
   public static function getPages(): array

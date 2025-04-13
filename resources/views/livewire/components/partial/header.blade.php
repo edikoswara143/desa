@@ -9,8 +9,15 @@
                 class="size-10"
             />
             <div class="flex flex-col w-full">
+                @auth
                 <div class="text-xs font-light text-sky-900">Haii</div>
-                <div class="text-sm font-bold text-sky-900">Edi Koswara</div>
+                <div class="text-sm font-bold text-sky-900">
+                    {{ Auth::user()->name }}
+                </div>
+                @else
+                <div class="text-xs font-light text-sky-900">Haii</div>
+                <div class="text-sm font-bold text-sky-900">Guest</div>
+                @endauth
             </div>
         </div>
     </div>

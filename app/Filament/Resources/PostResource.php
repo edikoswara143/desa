@@ -8,6 +8,7 @@ use App\Filament\Resources\PostResource\RelationManagers;
 use App\Models\Categorie;
 use App\Models\Category;
 use App\Models\Post;
+use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\RichEditor;
@@ -20,6 +21,7 @@ use Illuminate\Support\Str;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 
 class PostResource extends Resource
@@ -138,6 +140,18 @@ class PostResource extends Resource
   public static function getNavigationBadge(): ?string
   {
     return static::getModel()::count();
+  }
+
+  public static function getEloquentQuery(): Builder
+  {
+    $user = User::find(Auth::user()->id);
+    // $user = auth()->user();
+
+    if ($user->hasRole('admin')) {
+      return parent::getEloquentQuery();
+    }
+
+    return parent::getEloquentQuery()->where('user_id', $user->id);
   }
 
   public static function getPages(): array
