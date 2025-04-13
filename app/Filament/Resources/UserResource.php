@@ -12,13 +12,15 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Str;
 
 class UserResource extends Resource
 {
   protected static ?string $model = User::class;
 
   protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-
+  protected static ?string $navigationGroup = 'Settings';
+  protected static ?int $navigationSort = 1;
   public static function form(Form $form): Form
   {
     return $form
@@ -30,7 +32,9 @@ class UserResource extends Resource
           ->email()
           ->required()
           ->maxLength(255),
-        Forms\Components\DateTimePicker::make('email_verified_at'),
+        Forms\Components\DateTimePicker::make('email_verified_at')
+          ->closeOnDateSelection()
+          ->maxDate(now()),
         Forms\Components\TextInput::make('password')
           ->password()
           ->required()
@@ -38,6 +42,7 @@ class UserResource extends Resource
         Forms\Components\Select::make('roles')
           ->relationship('roles', 'name')
           ->columnSpanFull()
+          ->native(true)
           ->preload(),
       ]);
   }
@@ -53,6 +58,16 @@ class UserResource extends Resource
         Tables\Columns\TextColumn::make('email_verified_at')
           ->dateTime()
           ->sortable(),
+        Tables\Columns\TextColumn::make('roles')
+          ->label('Role')
+          ->label('Roles')
+          ->getStateUsing(fn($record) => collect($record->roles)
+            ->pluck('name')
+            ->map(fn($name) => Str::headline(str_replace('_', ' ', $name))))
+          ->colors([
+            'info',
+          ])
+          ->badge(),
         Tables\Columns\TextColumn::make('created_at')
           ->dateTime()
           ->sortable()
@@ -63,14 +78,20 @@ class UserResource extends Resource
           ->toggleable(isToggledHiddenByDefault: true),
       ])
       ->filters([
-        //
+        Tables\Filters\TrashedFilter::make(),
       ])
       ->actions([
         Tables\Actions\EditAction::make(),
+        Tables\Actions\ViewAction::make(),
+        Tables\Actions\DeleteAction::make(),
+        Tables\Actions\ForceDeleteAction::make(),
+        Tables\Actions\RestoreAction::make(),
       ])
       ->bulkActions([
         Tables\Actions\BulkActionGroup::make([
           Tables\Actions\DeleteBulkAction::make(),
+          Tables\Actions\ForceDeleteBulkAction::make(),
+          Tables\Actions\RestoreBulkAction::make(),
         ]),
       ]);
   }
@@ -80,6 +101,11 @@ class UserResource extends Resource
     return [
       //
     ];
+  }
+
+  public static function getNavigationBadge(): ?string
+  {
+    return static::getModel()::count();
   }
 
   public static function getPages(): array

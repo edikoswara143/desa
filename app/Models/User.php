@@ -8,6 +8,7 @@ use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
@@ -20,6 +21,7 @@ class User extends Authenticatable implements FilamentUser
     return str_ends_with($this->email, '@test.com');
   }
   /** @use HasFactory<\Database\Factories\UserFactory> */
+  use SoftDeletes;
   use HasRoles;
   use HasFactory, Notifiable;
 
@@ -31,6 +33,7 @@ class User extends Authenticatable implements FilamentUser
   protected $fillable = [
     'name',
     'email',
+    'email_verified_at',
     'password',
   ];
 
