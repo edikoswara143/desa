@@ -36,6 +36,14 @@ class UserResource extends Resource
           ->maxLength(255),
         Forms\Components\DateTimePicker::make('email_verified_at')
           ->closeOnDateSelection()
+          ->visible(function () {
+            $authUser = Auth::user();
+            if (!$authUser) {
+              return false;
+            }
+            $user = User::find($authUser->id);
+            return $user->hasRole('admin');
+          })
           ->maxDate(now()),
         Forms\Components\TextInput::make('password')
           ->password()

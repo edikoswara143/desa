@@ -64,4 +64,9 @@ class User extends Authenticatable implements FilamentUser
   {
     return $this->hasMany(Post::class);
   }
+
+  public function publiccomplaint(): HasMany
+  {
+    return $this->hasMany(PublicComplaint::class);
+  }
 }
