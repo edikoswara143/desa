@@ -96,6 +96,7 @@
             >
             <div class="flex-grow border-t border-sky-400"></div>
         </div>
+        @guest
         <a
             href="http://127.0.0.1:8000/admin/login"
             class="text-center w-full p-2 rounded-md bg-lime-700 text-slate-100 text-xs font-medium"
@@ -106,5 +107,18 @@
             class="text-center w-full p-2 rounded-md bg-sky-700 text-slate-50 text-xs font-medium"
             >Register</a
         >
+        @endguest @auth
+        <p
+            class="text-center w-full p-2 rounded-md bg-lime-700 text-slate-100 text-xs font-medium"
+        >
+            Welcome, {{ Auth::user()->name }}!
+        </p>
+        <!-- <button
+            class="text-center w-full p-2 rounded-md bg-sky-700 text-slate-50 text-xs font-medium cursor-pointer"
+            wire:click="logout"
+        >
+            Logout
+        </button> -->
+        @endauth
     </div>
 </div>
